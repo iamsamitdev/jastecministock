@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itgenius.ministock.R;
+import com.itgenius.ministock.api.RestAPI;
+import com.itgenius.ministock.api.RetrofitServer;
+import com.itgenius.ministock.model.RegisterResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -77,12 +85,37 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(typeID == 0){
                    Toast.makeText(RegisterActivity.this, "กรุณาเลือกประเภทของผู้ใช้ก่อน", Toast.LENGTH_SHORT ).show();
                 }else{
-                    System.out.println(userid.getText());
-                    System.out.println(username.getText());
-                    System.out.println(password.getText());
-                    System.out.println(firstname.getText());
-                    System.out.println(lastname.getText());
-                    System.out.println(typeID);
+
+                    // เรียกใช้งาน API Register ที่สร้างไว้ใน RestAPI
+                    RestAPI api = RetrofitServer.getClient().create(RestAPI.class);
+                    Call<RegisterResponse> register = api.register(
+//                            Integer.parseInt(userid.getText().toString()),
+//                            username.getText().toString(),
+//                            password.getText().toString(),
+//                            firstname.getText().toString(),
+//                            lastname.getText().toString(),
+//                            typeID
+                            3793,
+                            "joooe",
+                            "112233",
+                            "joe",
+                            "joeyyy",
+                            1
+                    );
+
+                    register.enqueue(new Callback<RegisterResponse>() {
+                        @Override
+                        public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                            System.out.println(response.body());
+                        }
+
+                        @Override
+                        public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                            System.out.println(t.getStackTrace());
+                            Toast.makeText(RegisterActivity.this, "มีข้อผิดพลาด ลงทะเบียนไม่สำเร็จ", Toast.LENGTH_SHORT ).show();
+                        }
+                    });
+
                 }
             }
         });

@@ -15,7 +15,7 @@ public class RegisterResponse {
 
     @SerializedName("message")
     @Expose
-    private  String message;
+    private String message;
 
     public String getCode() {
         return code;
@@ -27,5 +27,17 @@ public class RegisterResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
